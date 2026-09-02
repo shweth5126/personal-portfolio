@@ -1,0 +1,81 @@
+---
+import Icon from "./Icon.astro";
+import { stats } from "../data/content.js";
+
+// Split "2.5M+" into { prefix:"", num:2.5, decimals:1, suffix:"M+" } for the count-up.
+function parseValue(v) {
+  const m = String(v).match(/^([^\d.-]*)(-?\d*\.?\d+)(.*)$/);
+  if (!m) return { prefix: "", num: 0, decimals: 0, suffix: String(v) };
+  const decimals = m[2].includes(".") ? m[2].split(".")[1].length : 0;
+  return { prefix: m[1], num: parseFloat(m[2]), decimals, suffix: m[3] };
+}
+const parsed = stats.map((s) => ({ ...s, ...parseValue(s.value) }));
+---
+<section class="py-12 md:py-20 bg-white">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="grid grid-cols-2 md:grid-cols-4 gap-4 md:gap-8" id="stats-grid">
+      {
+        parsed.map((s) => (
+          <div class="text-center reveal">
+            <Icon name={s.icon} class="w-8 h-8 md:w-12 md:h-12 mx-auto mb-2 md:mb-4 text-gray-600" />
+            <div
+              class="text-2xl md:text-4xl font-bold text-gray-800 mb-1 md:mb-2"
+              data-count
+              data-target={s.num}
+              data-decimals={s.decimals}
+              data-prefix={s.prefix}
+              data-suffix={s.suffix}
+            >
+              {s.value}
+            </div>
+            <div class="text-xs md:text-sm text-gray-600">{s.label}</div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const grid = document.getElementById("stats-grid");
+  const els = Array.from(document.querySelectorAll("[data-count]"));
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+
+  function fmt(el, n) {
+    const d = +el.dataset.decimals;
+    el.textContent = el.dataset.prefix + n.toFixed(d) + el.dataset.suffix;
+  }
+
+  function run() {
+    const DUR = 1600;
+    els.forEach((el) => {
+      const target = parseFloat(el.dataset.target);
+      const start = performance.now();
+      function tick(now) {
+        const t = Math.min(1, (now - start) / DUR);
+        // ease-out quart: fast start, slows to a stop
+        const eased = 1 - Math.pow(1 - t, 4);
+        fmt(el, target * eased);
+        if (t < 1) requestAnimationFrame(tick);
+        else fmt(el, target);
+      }
+      fmt(el, 0);
+      requestAnimationFrame(tick);
+    });
+  }
+
+  if (reduce || !("IntersectionObserver" in window) || !grid) {
+    els.forEach((el) => fmt(el, parseFloat(el.dataset.target)));
+  } else {
+    const io = new IntersectionObserver(
+      (entries) => {
+        if (entries.some((e) => e.isIntersecting)) {
+          io.disconnect();
+          run();
+        }
+      },
+      { threshold: 0.4 }
+    );
+    io.observe(grid);
+  }
+</script>

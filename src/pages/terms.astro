@@ -1,0 +1,41 @@
+---
+import LegalLayout from "../components/LegalLayout.astro";
+import { site, contact } from "../data/content.js";
+---
+<LegalLayout title="Terms & Conditions" updated="August 2026">
+  <p>
+    These terms cover use of this website and enquiries made through it. Replace
+    this template text with terms reviewed for your jurisdiction before going
+    live.
+  </p>
+
+  <h2>Use of this site</h2>
+  <p>
+    Content on this site, including videos, images and copy, belongs to
+    {site.name} and may not be reused without permission.
+  </p>
+
+  <h2>Enquiries and quotes</h2>
+  <p>
+    Submitting the contact form does not create a contract. Any quote, scope,
+    timeline and price is confirmed separately in writing before work begins.
+  </p>
+
+  <h2>Project work</h2>
+  <p>
+    Deliverables, revision rounds, payment terms and usage rights are set out in
+    the individual agreement for each project. Where this site mentions turnaround
+    times or revision counts, those are defaults and may change per project.
+  </p>
+
+  <h2>Liability</h2>
+  <p>
+    This site is provided "as is". We are not liable for losses arising from use
+    of the site or reliance on its content.
+  </p>
+
+  <h2>Contact</h2>
+  <p>
+    Questions about these terms: <a href={`mailto:${contact.email}`}>{contact.email}</a>.
+  </p>
+</LegalLayout>

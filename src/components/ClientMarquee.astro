@@ -1,0 +1,32 @@
+---
+import { marqueeClients } from "../data/content.js";
+
+// Build one "set" wide enough to overflow any screen, then render it twice.
+// The animation scrolls exactly one set width (-50%), so the loop is seamless
+// no matter how few real clients there are.
+const MIN_PER_SET = 12;
+const reps = Math.max(1, Math.ceil(MIN_PER_SET / marqueeClients.length));
+const set = Array.from({ length: reps }, () => marqueeClients).flat();
+const row = [...set, ...set];
+---
+<section class="py-10 md:py-14">
+  <div class="relative w-full overflow-hidden">
+    <div class="flex gap-16 md:gap-28 w-max animate-scroll">
+      {
+        row.map((c) => (
+          <div class="flex-shrink-0 flex flex-col items-center">
+            <a href={c.href} target="_blank" rel="noopener noreferrer" class="cursor-pointer group">
+              <div class="w-32 h-32 md:w-40 md:h-40 rounded-full border-2 relative overflow-hidden border-black hover:shadow-lg transition-all duration-300">
+                <img src={c.img} alt="" class="w-full h-full object-cover rounded-full" />
+                <div class="absolute inset-0 bg-black/0 group-hover:bg-black/20 transition-colors duration-300 rounded-full" />
+              </div>
+            </a>
+            <div class="mt-3 text-center">
+              <p class="text-sm font-semibold text-gray-700">{c.label}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

@@ -1,0 +1,100 @@
+---
+import Icon from "./Icon.astro";
+import { featuredWork } from "../data/content.js";
+
+const offsets = [
+  "rotate-1 md:rotate-2 lg:rotate-3 -mt-8 md:-mt-12 lg:-mt-16",
+  "-rotate-1 md:-rotate-2 lg:-rotate-3 mt-2 md:mt-4 lg:mt-6",
+  "rotate-1 md:rotate-2 lg:rotate-3 mt-2 md:mt-4 lg:mt-6",
+  "-rotate-1 md:-rotate-2 lg:-rotate-3 -mt-8 md:-mt-12 lg:-mt-16",
+];
+---
+<section class="py-12 md:py-20 mb-16">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12 md:mb-16 reveal">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 cinzel px-4">
+        {featuredWork.heading}
+      </h2>
+      <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto px-4">{featuredWork.subtitle}</p>
+    </div>
+
+    <div class="w-full flex justify-center">
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-8 md:gap-12 lg:gap-16 max-w-7xl">
+        {
+          featuredWork.videos.map((v, i) => (
+            <div
+              class:list={[
+                "aspect-[9/16] bg-black rounded-lg md:rounded-xl lg:rounded-2xl overflow-hidden shadow-lg flex flex-col items-center justify-center max-w-sm md:max-w-md lg:max-w-lg border-2 md:border-4 border-black reveal",
+                offsets[i % offsets.length],
+              ]}
+            >
+              {v.src ? (
+                <video
+                  src={v.src}
+                  poster={v.poster}
+                  class="w-full h-full object-cover"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  controls
+                  preload="metadata"
+                  style="aspect-ratio: 9 / 16;"
+                />
+              ) : (
+                <img src={v.poster} alt="" class="w-full h-full object-cover" loading="lazy" />
+              )}
+            </div>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="text-center mt-12 reveal">
+      <a
+        href={featuredWork.viewAllHref}
+        class="inline-flex items-center text-lg font-semibold text-gray-800 hover:text-gray-600 transition-colors"
+      >
+        {featuredWork.viewAllText}
+        <Icon name="arrow-right" class="w-5 h-5 ml-2" />
+      </a>
+    </div>
+  </div>
+</section>
+
+<script>
+  // Featured Work clips: all start muted and playing together.
+  // Pause when scrolled fully out of view to save battery; resume on return.
+  const vids = Array.from(document.querySelectorAll("section video[autoplay]"));
+
+  function playAll() {
+    vids.forEach((v) => {
+      v.muted = true;
+      const p = v.play();
+      if (p) p.catch(() => {});
+    });
+  }
+  playAll();
+  // Retry once after first user interaction, in case autoplay was blocked.
+  window.addEventListener("pointerdown", playAll, { once: true });
+
+  // Keep every clip playing together while the section is anywhere near the
+  // viewport; only pause once it's scrolled well out of the way.
+  if ("IntersectionObserver" in window) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) {
+            e.target.muted = true;
+            const p = e.target.play();
+            if (p) p.catch(() => {});
+          } else {
+            e.target.pause();
+          }
+        });
+      },
+      { rootMargin: "150% 0px 150% 0px" }
+    );
+    vids.forEach((v) => io.observe(v));
+  }
+</script>

@@ -1,0 +1,87 @@
+---
+import Base from "../layouts/Base.astro";
+import PillNav from "../components/PillNav.astro";
+import Footer from "../components/Footer.astro";
+import ClipTile from "../components/ClipTile.astro";
+import { allWork } from "../data/content.js";
+
+const slug = (s) => s.toLowerCase().replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+---
+<Base title="Work">
+  <div class="bg-white min-h-screen w-full overflow-x-hidden">
+    <PillNav />
+
+    <header class="pt-28 md:pt-36 pb-8 md:pb-12 text-center px-4">
+      <h1 class="cinzel text-4xl md:text-6xl mb-3">{allWork.heading}</h1>
+      <p class="text-gray-600 text-lg">{allWork.subtitle}</p>
+      <a href="/#hero" class="inline-block mt-5 text-sm text-gray-500 hover:text-black">&larr; Back to home</a>
+    </header>
+
+    <!-- category filter -->
+    <div class="flex flex-wrap justify-center gap-2 md:gap-3 px-4 mb-12 md:mb-16" id="work-filters">
+      <button data-filter="all" class="chip chip-active">View all</button>
+      {allWork.categories.map((c) => (
+        <button data-filter={slug(c.name)} class="chip">{c.name}</button>
+      ))}
+    </div>
+
+    <main class="max-w-6xl mx-auto px-4 sm:px-6 pb-24 space-y-14 md:space-y-20">
+      {
+        allWork.categories.map((cat) => (
+          <section data-cat={slug(cat.name)}>
+            <h2 class="text-xl md:text-2xl font-bold mb-5 md:mb-6">{cat.name}</h2>
+            <div class="flex flex-wrap gap-5 md:gap-6">
+              {cat.items.map((item) => (
+                <ClipTile
+                  src={item.src}
+                  poster={item.poster}
+                  title={item.title}
+                  orientation={item.orientation}
+                />
+              ))}
+            </div>
+          </section>
+        ))
+      }
+    </main>
+
+    <Footer />
+  </div>
+</Base>
+
+<style>
+  .chip {
+    border: 1px solid #d4d4d8;
+    border-radius: 9999px;
+    padding: 0.4rem 1rem;
+    font-size: 0.9rem;
+    color: #52525b;
+    transition: all 0.15s ease;
+  }
+  .chip:hover:not(.chip-active) {
+    color: #000;
+    border-color: #9ca3af;
+  }
+  .chip-active {
+    background: #000 !important;
+    color: #fff !important;
+    border-color: #000 !important;
+  }
+</style>
+
+<script>
+  const bar = document.getElementById("work-filters");
+  const sections = Array.from(document.querySelectorAll("[data-cat]"));
+
+  bar?.addEventListener("click", (e) => {
+    const btn = e.target.closest(".chip");
+    if (!btn) return;
+    bar.querySelectorAll(".chip").forEach((c) => c.classList.remove("chip-active"));
+    btn.classList.add("chip-active");
+    const f = btn.dataset.filter;
+    sections.forEach((s) => {
+      s.hidden = f !== "all" && s.dataset.cat !== f;
+    });
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  });
+</script>

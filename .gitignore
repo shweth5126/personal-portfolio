@@ -1,0 +1,9 @@
+node_modules/
+dist/
+.astro/
+.DS_Store
+.vercel
+*.log
+
+# Raw source footage - do NOT commit (huge). Compressed web copies live in public/work/.
+my work to be added/

@@ -1,0 +1,44 @@
+---
+import Base from "../layouts/Base.astro";
+import FloatingLogo from "../components/FloatingLogo.astro";
+import PillNav from "../components/PillNav.astro";
+import Hero from "../components/Hero.astro";
+import GradientBridge from "../components/GradientBridge.astro";
+import Stats from "../components/Stats.astro";
+import ClientMarquee from "../components/ClientMarquee.astro";
+import Footprint from "../components/Footprint.astro";
+import CollaborateCta from "../components/CollaborateCta.astro";
+import FeaturedWork from "../components/FeaturedWork.astro";
+import Process from "../components/Process.astro";
+import Services from "../components/Services.astro";
+import Testimonials from "../components/Testimonials.astro";
+import Contact from "../components/Contact.astro";
+import Faq from "../components/Faq.astro";
+import Footer from "../components/Footer.astro";
+---
+
+<Base>
+  <div class="App bg-white min-h-screen w-full overflow-x-hidden">
+    <FloatingLogo />
+    <PillNav />
+
+    <div class="min-h-screen">
+      <Hero />
+      <GradientBridge />
+      <Stats />
+      <ClientMarquee />
+      <Footprint />
+      <CollaborateCta />
+      <FeaturedWork />
+      <section id="services">
+        <Services />
+        <Process />
+      </section>
+      <Testimonials />
+      <Contact />
+      <Faq />
+    </div>
+
+    <Footer />
+  </div>
+</Base>

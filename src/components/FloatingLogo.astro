@@ -1,0 +1,10 @@
+---
+import { site } from "../data/content.js";
+// Fixed image logo, top-left, desktop only. Shows only when site.showLogo is on.
+// With no logo, the name text in PillNav covers branding instead.
+---
+{site.showLogo && (
+  <div class="hidden lg:block fixed -top-8 left-20 z-50">
+    <img src={site.logo} alt={site.name} class="w-44 h-44 object-contain" />
+  </div>
+)}

@@ -1,0 +1,83 @@
+---
+import Icon from "./Icon.astro";
+import { testimonials } from "../data/content.js";
+---
+<section id="testimonials" class="mb-16">
+  <div class="min-h-screen bg-white pt-16">
+    <section class="py-16 md:py-24 lg:py-32">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center mb-10 md:mb-16 lg:mb-20 reveal">
+          <h1 class="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold mb-4 md:mb-6 lg:mb-8 cinzel text-gray-800">
+            {testimonials.heading}
+          </h1>
+          <p class="text-lg sm:text-xl md:text-2xl text-gray-600 max-w-4xl mx-auto">{testimonials.subtitle}</p>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-16">
+          {
+            testimonials.items.map((t) => (
+              <div class="bg-white rounded-3xl shadow-xl flex flex-col overflow-hidden max-w-sm mx-auto reveal">
+                <div class="relative">
+                  {t.video ? (
+                    <video
+                      src={t.video}
+                      poster={t.poster}
+                      class="w-full aspect-[9/16] object-cover rounded-t-3xl bg-black"
+                      preload="none"
+                      playsinline
+                      loop
+                      muted
+                      data-testi-video
+                    />
+                  ) : (
+                    <img src={t.poster} alt={t.name} class="w-full aspect-[4/5] object-cover rounded-t-3xl bg-gray-100" loading="lazy" />
+                  )}
+                  {t.video && (
+                    <button
+                      class="absolute top-3 left-1/2 -translate-x-1/2 bg-black/70 text-white rounded-full px-5 py-2 text-sm font-semibold flex items-center"
+                      data-unmute
+                    >
+                      <Icon name="volume-x" class="inline w-5 h-5 mr-1" />
+                      <span data-unmute-label>Unmute</span>
+                    </button>
+                  )}
+                </div>
+                <div class="p-8 flex-1 flex flex-col justify-between">
+                  <Icon name="quote" class="w-8 h-8 text-gray-400 mb-3" />
+                  <p class="text-gray-700 text-sm md:text-lg leading-relaxed italic font-light tracking-wide text-center">
+                    {t.quote}
+                  </p>
+                  <div class="flex items-center mt-6">
+                    <img src={t.avatar} alt={t.name} class="w-12 h-12 rounded-full object-cover mr-4" />
+                    <div>
+                      <p class="font-semibold text-gray-900">{t.name}</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ))
+          }
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<script>
+  document.querySelectorAll("[data-unmute]").forEach((btn) => {
+    const card = btn.closest(".relative");
+    const video = card?.querySelector("[data-testi-video]");
+    const label = btn.querySelector("[data-unmute-label]");
+    btn.addEventListener("click", () => {
+      if (!video) return;
+      if (video.muted || video.paused) {
+        video.muted = false;
+        video.play();
+        if (label) label.textContent = "Mute";
+      } else {
+        video.muted = true;
+        if (label) label.textContent = "Unmute";
+      }
+    });
+  });
+</script>

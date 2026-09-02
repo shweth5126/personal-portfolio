@@ -1,0 +1,23 @@
+---
+// One work clip. orientation: "portrait" (9:16) or "landscape" (16:9).
+const { src, poster, title, orientation = "portrait" } = Astro.props;
+const isLandscape = orientation === "landscape";
+---
+<figure class:list={["w-full", isLandscape ? "max-w-md" : "max-w-[240px]"]}>
+  <div
+    class:list={[
+      isLandscape ? "aspect-video" : "aspect-[9/16]",
+      "rounded-xl overflow-hidden bg-black border-2 border-black shadow-md",
+    ]}
+  >
+    <video
+      src={src}
+      poster={poster}
+      class="w-full h-full object-cover"
+      controls
+      preload="none"
+      playsinline
+    ></video>
+  </div>
+  <figcaption class="mt-2 text-sm text-gray-600">{title}</figcaption>
+</figure>

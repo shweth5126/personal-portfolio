@@ -1,0 +1,32 @@
+---
+import { footprint } from "../data/content.js";
+---
+<section class="py-12 md:py-20 bg-white">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6">
+    <div class="text-center mb-12 md:mb-16 reveal">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 cinzel text-black px-4">
+        {footprint.heading}
+      </h2>
+    </div>
+
+    <div class="bg-white rounded-xl md:rounded-2xl border-2 border-black p-6 md:p-8 lg:p-12 reveal-scale relative">
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
+        <div class="text-center">
+          <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-2">{footprint.left.value}</div>
+          <div class="text-base md:text-lg text-gray-700 mb-4">{footprint.left.label}</div>
+          <div class="flex justify-center">
+            <div class="w-3 h-3 bg-black rounded-full animate-pulse"></div>
+          </div>
+        </div>
+        <div class="hidden md:block absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2 w-px h-16 bg-black/20"></div>
+        <div class="text-center">
+          <div class="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold text-black mb-2">{footprint.right.value}</div>
+          <div class="text-base md:text-lg text-gray-700 mb-4">{footprint.right.label}</div>
+        </div>
+      </div>
+      <div class="text-center mt-8">
+        <p class="text-lg md:text-xl text-black font-medium">{footprint.note}</p>
+      </div>
+    </div>
+  </div>
+</section>

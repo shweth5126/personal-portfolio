@@ -1,0 +1,23 @@
+---
+import { collaborateCta, contact } from "../data/content.js";
+const waLink = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(contact.whatsappMessage)}`;
+---
+<section class="py-12 md:py-20 bg-gray-50">
+  <div class="max-w-4xl mx-auto px-4 sm:px-6 text-center">
+    <div class="mb-8 md:mb-12 reveal">
+      <h2 class="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold mb-4 md:mb-6 cinzel text-black px-4">
+        {collaborateCta.heading}
+      </h2>
+    </div>
+    <div class="reveal-scale">
+      <a
+        href={waLink}
+        target="_blank"
+        rel="noopener noreferrer"
+        class="inline-block bg-black text-white px-6 md:px-12 py-3 md:py-4 rounded-full text-sm md:text-lg font-semibold hover:bg-gray-800 transition-colors duration-300 hover:scale-105"
+      >
+        {collaborateCta.buttonText}
+      </a>
+    </div>
+  </div>
+</section>

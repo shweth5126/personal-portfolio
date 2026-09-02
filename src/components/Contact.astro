@@ -1,0 +1,169 @@
+---
+import Icon from "./Icon.astro";
+import { contact, contactSection } from "../data/content.js";
+
+const waLink = `https://wa.me/${contact.whatsapp}?text=${encodeURIComponent(contact.whatsappMessage)}`;
+const formReady = Boolean(contact.web3formsKey);
+const calendlyReady = Boolean(contact.calendlyUrl);
+---
+<section id="contact" class="mb-16">
+  <div class="pt-8">
+    <section class="py-12 md:py-20 bg-gradient-to-br from-gray-50 to-custom-beige">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="text-center">
+          <h1 class="text-3xl md:text-5xl lg:text-6xl font-bold mb-6 cinzel">{contactSection.heading}</h1>
+          <p class="text-lg md:text-xl text-gray-600 max-w-3xl mx-auto">{contactSection.subtitle}</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="py-12 md:py-20">
+      <div class="max-w-7xl mx-auto px-4">
+        <div class="grid lg:grid-cols-2 gap-8 lg:gap-16">
+          <!-- form -->
+          <div class="reveal">
+            <h2 class="text-2xl md:text-3xl font-bold mb-6 md:mb-8 cinzel">{contactSection.formTitle}</h2>
+            <form
+              class="space-y-6"
+              id="contact-form"
+              action="https://api.web3forms.com/submit"
+              method="POST"
+              data-ready={formReady ? "1" : "0"}
+              data-email={contact.email}
+            >
+              <input type="hidden" name="access_key" value={contact.web3formsKey} />
+              <input type="hidden" name="subject" value="New project inquiry from portfolio" />
+              <input type="checkbox" name="botcheck" class="hidden" tabindex="-1" autocomplete="off" />
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="name" class="block text-sm font-medium text-gray-700 mb-2">Full Name *</label>
+                  <input type="text" id="name" name="name" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" placeholder="Your name" />
+                </div>
+                <div>
+                  <label for="email" class="block text-sm font-medium text-gray-700 mb-2">Email Address *</label>
+                  <input type="email" id="email" name="email" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" placeholder="you@example.com" />
+                </div>
+              </div>
+
+              <div>
+                <label for="projectType" class="block text-sm font-medium text-gray-700 mb-2">Type of Project *</label>
+                <select id="projectType" name="projectType" required class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                  <option value="">Select project type</option>
+                  {contactSection.projectTypes.map((p) => <option value={p}>{p}</option>)}
+                </select>
+              </div>
+
+              <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label for="budgetRange" class="block text-sm font-medium text-gray-700 mb-2">Budget Range</label>
+                  <select id="budgetRange" name="budgetRange" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent">
+                    <option value="">Select budget range</option>
+                    {contactSection.budgetRanges.map((b) => <option value={b}>{b}</option>)}
+                  </select>
+                </div>
+                <div>
+                  <label for="deadline" class="block text-sm font-medium text-gray-700 mb-2">Project Deadline</label>
+                  <input type="date" id="deadline" name="deadline" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent" />
+                </div>
+              </div>
+
+              <div>
+                <label for="message" class="block text-sm font-medium text-gray-700 mb-2">Project Details *</label>
+                <textarea id="message" name="message" required rows="6" class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-gray-500 focus:border-transparent resize-none" placeholder="Tell me about your project, goals, style preferences, and any specific requirements..."></textarea>
+              </div>
+
+              <button type="submit" class="w-full bg-gray-800 text-custom-beige py-4 px-6 rounded-lg font-semibold hover:bg-gray-700 transition-colors flex items-center justify-center">
+                <Icon name="send" class="w-5 h-5 mr-2" />
+                Send Project Inquiry
+              </button>
+              <p class="text-sm text-gray-600" data-form-status hidden></p>
+            </form>
+          </div>
+
+          <!-- contact details -->
+          <div class="space-y-6 md:space-y-8 reveal">
+            <div class="bg-gray-50 rounded-xl p-6 md:p-8">
+              <h3 class="text-2xl font-semibold mb-6">Get in Touch</h3>
+              <div class="space-y-4">
+                <a href={`mailto:${contact.email}`} class="flex items-center">
+                  <Icon name="mail" class="w-5 h-5 text-gray-600 mr-3" />
+                  <span class="text-gray-700">{contact.email}</span>
+                </a>
+                <a href={`tel:${contact.phone.replace(/\s/g, "")}`} class="flex items-center">
+                  <Icon name="phone" class="w-5 h-5 text-gray-600 mr-3" />
+                  <span class="text-gray-700">{contact.phone}</span>
+                </a>
+              </div>
+            </div>
+
+            {calendlyReady && (
+              <div class="bg-white border border-gray-200 rounded-xl p-4">
+                <h3 class="text-xl font-semibold mb-4 text-blue-800 text-center">Book a Call Instantly</h3>
+                <iframe
+                  src={`${contact.calendlyUrl}?embed_type=Inline`}
+                  title="Select a Date & Time"
+                  class="w-full rounded-lg"
+                  style="min-width: 100%; height: 640px; border: 0;"
+                  loading="lazy"
+                ></iframe>
+              </div>
+            )}
+
+            <div class="bg-green-50 border border-green-200 rounded-xl p-6 md:p-8 text-center">
+              <h3 class="text-xl font-semibold mb-4 text-green-800">Quick Chat?</h3>
+              <p class="text-green-700 mb-4">{contactSection.quickChatNote}</p>
+              <a href={waLink} target="_blank" rel="noopener noreferrer" class="inline-block bg-green-600 text-white px-6 py-3 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+                Message me on WhatsApp
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</section>
+
+<script>
+  const form = document.getElementById("contact-form");
+  const status = document.querySelector("[data-form-status]");
+
+  form?.addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const fd = new FormData(form);
+
+    // No Web3Forms key yet: open the visitor's mail app pre-filled.
+    if (form.dataset.ready !== "1") {
+      const to = form.dataset.email;
+      const body = [
+        `Name: ${fd.get("name") || ""}`,
+        `Email: ${fd.get("email") || ""}`,
+        `Project: ${fd.get("projectType") || ""}`,
+        `Budget: ${fd.get("budgetRange") || ""}`,
+        `Deadline: ${fd.get("deadline") || ""}`,
+        "",
+        `${fd.get("message") || ""}`,
+      ].join("\n");
+      window.location.href = `mailto:${to}?subject=${encodeURIComponent("Project inquiry")}&body=${encodeURIComponent(body)}`;
+      return;
+    }
+
+    status.hidden = false;
+    status.textContent = "Sending...";
+    try {
+      const res = await fetch(form.action, {
+        method: "POST",
+        body: fd,
+        headers: { Accept: "application/json" },
+      });
+      if (res.ok) {
+        form.reset();
+        status.textContent = "Thanks - your inquiry is on its way. I'll reply within a day.";
+      } else {
+        status.textContent = "Something went wrong. Please email me directly.";
+      }
+    } catch {
+      status.textContent = "Network error. Please email me directly.";
+    }
+  });
+</script>

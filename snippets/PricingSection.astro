@@ -1,0 +1,176 @@
+---
+/**
+ * Standalone pricing section with monthly/annual toggle.
+ * Copy this ONE file into any Astro + Tailwind v3 project. No other deps,
+ * no tailwind.config changes (uses plain slate-* colours, not semantic tokens).
+ *
+ * Edit the `data` object below. `priceMonthly` shows first; clicking the
+ * toggle swaps every price to `priceYearly`.
+ *
+ * Not using Astro? Everything here is plain HTML + Tailwind + one <script>.
+ * Paste the <section> and <script> straight into any page; delete this
+ * frontmatter and hard-code the loop, or keep a tiny JS map.
+ */
+const data = {
+  heading: "Subscribe today, and begin your growth journey tomorrow",
+  subtitle:
+    "Choose the plan that works for you\nAll plans include access to our platform, lead generation tools, and dedicated support.",
+  toggleLabel: "Annual billing",
+  toggleNote: "(Save 20%)",
+  ctaHref: "#contact",
+  plans: [
+    {
+      name: "Basic",
+      priceMonthly: "$1,499",
+      priceYearly: "$1,199",
+      period: "/ month",
+      billed: "billed monthly",
+      features: [
+        "15 Videos Package/Month",
+        "World-class editor",
+        "Personalized video branding",
+        "Pause or cancel anytime",
+        "24/7 Chat support",
+        "Unlimited Revisions",
+        "Monthly Growth Reports",
+      ],
+      cta: "Book A Call",
+      footnote: "Best for coaches/online trainers",
+      popular: false,
+    },
+    {
+      name: "Growth",
+      priceMonthly: "$1,799",
+      priceYearly: "$1,439",
+      period: "/ month",
+      billed: "billed monthly",
+      features: [
+        "Everything you get in Basic Plus",
+        "Expert animator",
+        "15 inspirational and personal designed posts",
+        "Automation setup",
+      ],
+      cta: "Book A Call",
+      footnote: "Best for creators/brands serious about organic growth",
+      popular: true,
+    },
+    {
+      name: "Custom Plan",
+      priceMonthly: "$0",
+      priceYearly: "$0",
+      period: "/",
+      billed: "billed monthly",
+      features: [],
+      cta: "Book A Call",
+      footnote: "Need A Custom Plan?",
+      popular: false,
+    },
+  ],
+};
+
+const star =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="h-4 w-4"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>';
+const check =
+  '<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4 mt-1 flex-shrink-0 text-slate-900"><path d="M20 6 9 17l-5-5"/></svg>';
+---
+<section class="py-12 md:py-20">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="text-center space-y-4 mb-12">
+      <h2 class="text-4xl font-bold tracking-tight sm:text-5xl">{data.heading}</h2>
+      <p class="text-slate-500 text-lg whitespace-pre-line">{data.subtitle}</p>
+    </div>
+
+    <div class="flex justify-center items-center mb-10">
+      <button
+        type="button"
+        role="switch"
+        aria-checked="false"
+        id="billing-toggle"
+        data-state="unchecked"
+        class="inline-flex h-6 w-11 shrink-0 cursor-pointer items-center rounded-full border-2 border-transparent transition-colors bg-slate-200"
+      >
+        <span class="pointer-events-none block h-5 w-5 rounded-full bg-white shadow-lg transition-transform translate-x-0" data-thumb></span>
+      </button>
+      <span class="ml-2 font-semibold">
+        {data.toggleLabel} <span class="text-slate-900">{data.toggleNote}</span>
+      </span>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      {
+        data.plans.map((plan, i) => (
+          <div
+            class:list={[
+              "rounded-2xl p-6 bg-white text-center flex flex-col relative",
+              plan.popular ? "border-slate-900 border-2 z-10" : "border border-slate-200 mt-5 z-0",
+              !plan.popular && i === 0 ? "lg:[transform:rotateY(10deg)] lg:origin-right" : "",
+              !plan.popular && i === 2 ? "lg:[transform:rotateY(-10deg)] lg:origin-left" : "",
+            ]}
+          >
+            {plan.popular && (
+              <div class="absolute top-0 right-0 bg-slate-900 text-slate-50 py-0.5 px-2 rounded-bl-xl rounded-tr-xl flex items-center">
+                <Fragment set:html={star} />
+                <span class="ml-1 font-semibold">Popular</span>
+              </div>
+            )}
+            <div class="flex-1 flex flex-col">
+              <p class="text-base font-semibold text-slate-500">{plan.name}</p>
+              <div class="mt-6 flex items-center justify-center gap-x-2">
+                <span
+                  class="text-5xl font-bold tracking-tight text-slate-950"
+                  data-price
+                  data-monthly={plan.priceMonthly}
+                  data-yearly={plan.priceYearly}
+                >{plan.priceMonthly}</span>
+                <span class="text-sm font-semibold leading-6 tracking-wide text-slate-500">{plan.period}</span>
+              </div>
+              <p class="text-xs leading-5 text-slate-500">{plan.billed}</p>
+
+              <ul class="mt-5 gap-2 flex flex-col">
+                {plan.features.map((f) => (
+                  <li class="flex items-start gap-2">
+                    <Fragment set:html={check} />
+                    <span class="text-left">{f}</span>
+                  </li>
+                ))}
+              </ul>
+
+              <hr class="w-full my-4" />
+
+              <a
+                href={data.ctaHref}
+                class:list={[
+                  "inline-flex items-center justify-center whitespace-nowrap rounded-md border border-slate-200 h-10 px-4 py-2 w-full text-lg font-semibold tracking-tighter transition-all duration-300 hover:ring-2 hover:ring-slate-900 hover:ring-offset-1 hover:bg-slate-900 hover:text-slate-50",
+                  plan.popular ? "bg-slate-900 text-slate-50" : "bg-white text-slate-950",
+                ]}
+              >
+                {plan.cta}
+              </a>
+              <p class="mt-6 text-xs leading-5 text-slate-500">{plan.footnote}</p>
+            </div>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  const toggle = document.getElementById("billing-toggle");
+  const thumb = toggle?.querySelector("[data-thumb]");
+  const prices = Array.from(document.querySelectorAll("[data-price]"));
+  let yearly = false;
+
+  toggle?.addEventListener("click", () => {
+    yearly = !yearly;
+    toggle.setAttribute("aria-checked", String(yearly));
+    toggle.dataset.state = yearly ? "checked" : "unchecked";
+    toggle.classList.toggle("bg-slate-900", yearly);
+    toggle.classList.toggle("bg-slate-200", !yearly);
+    thumb?.classList.toggle("translate-x-5", yearly);
+    thumb?.classList.toggle("translate-x-0", !yearly);
+    prices.forEach((p) => {
+      p.textContent = yearly ? p.dataset.yearly : p.dataset.monthly;
+    });
+  });
+</script>

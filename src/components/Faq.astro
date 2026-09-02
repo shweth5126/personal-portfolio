@@ -1,0 +1,22 @@
+---
+import { faqs } from "../data/content.js";
+---
+<section id="faq" class="py-32 bg-gray-50">
+  <div class="max-w-5xl mx-auto px-4">
+    <div class="text-center mb-20 reveal">
+      <h2 class="text-5xl md:text-6xl font-bold mb-8 cinzel">Frequently Asked Questions</h2>
+      <p class="text-2xl text-gray-600">Quick answers to common questions</p>
+    </div>
+
+    <div class="space-y-8">
+      {
+        faqs.map((f) => (
+          <div class="bg-custom-beige rounded-xl p-8 shadow-md reveal">
+            <h3 class="text-xl font-semibold mb-4 text-gray-800">{f.q}</h3>
+            <p class="text-lg text-gray-600">{f.a}</p>
+          </div>
+        ))
+      }
+    </div>
+  </div>
+</section>

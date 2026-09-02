@@ -1,0 +1,39 @@
+---
+import Icon from "./Icon.astro";
+import { contact, socials, footer, site } from "../data/content.js";
+const links = [
+  ["instagram", socials.instagram],
+  ["youtube", socials.youtube],
+  ["linkedin", socials.linkedin],
+].filter(([, url]) => url);
+---
+<footer class="bg-white border-t mt-10">
+  <div class="max-w-7xl mx-auto px-4 sm:px-6 py-6 md:py-10">
+    <div class="flex justify-start mb-4">
+      {site.showLogo ? (
+        <img src={site.logo} alt={site.name} class="h-12 md:h-16 object-contain bg-black p-2 rounded-lg" />
+      ) : (
+        <span class="text-xl md:text-2xl font-bold tracking-tight">{site.name}</span>
+      )}
+    </div>
+    <div class="w-full h-px bg-black mb-6"></div>
+    <div class="flex flex-col md:flex-row items-center justify-between gap-4 md:gap-6">
+      <div class="text-gray-600 text-xs md:text-sm flex flex-col md:flex-row items-center gap-1 md:gap-2 text-center">
+        <span>Say Hi at <a href={`mailto:${contact.email}`} class="underline hover:text-black">{contact.email}</a></span>
+        <span class="hidden md:inline-block mx-2">|</span>
+        <a href={footer.privacyHref} class="hover:underline">Privacy Policy</a>
+        <span class="hidden md:inline-block mx-2">|</span>
+        <a href={footer.termsHref} class="hover:underline">Terms &amp; Conditions</a>
+      </div>
+      {links.length > 0 && (
+        <div class="flex items-center gap-2 md:gap-3">
+          {links.map(([name, url]) => (
+            <a href={url} target="_blank" rel="noopener noreferrer" class="hover:opacity-80 text-black">
+              <Icon name={name} class="w-6 h-6" />
+            </a>
+          ))}
+        </div>
+      )}
+    </div>
+  </div>
+</footer>

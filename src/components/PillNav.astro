@@ -1,0 +1,66 @@
+---
+import Icon from "./Icon.astro";
+import { nav, site } from "../data/content.js";
+
+// On non-home pages, "#x" links become "/#x" so they still jump to the section.
+const path = Astro.url.pathname;
+const onHome = path === "/" || path === "";
+const resolve = (href) => (href.startsWith("#") && !onHome ? "/" + href : href);
+---
+<div class="fixed top-0 left-1/2 -translate-x-1/2 z-50 mt-2 md:mt-4 lg:mt-6 flex items-center gap-3">
+  {!site.showLogo && (
+    <a href="/" class="hidden lg:block text-white font-bold tracking-tight whitespace-nowrap drop-shadow">
+      {site.name}
+    </a>
+  )}
+  <div
+    class="flex items-center gap-2 lg:gap-3 bg-black/70 backdrop-blur-lg border border-white/20 py-2 px-2 rounded-full shadow-xl"
+    id="pill-nav"
+  >
+    {
+      nav.map((item, i) => (
+        <a
+          href={resolve(item.href)}
+          data-nav
+          data-hash={item.href.startsWith("#") ? item.href.slice(1) : ""}
+          class:list={[
+            "relative cursor-pointer text-sm font-semibold px-3 md:px-4 lg:px-6 py-2 rounded-full transition-colors hover:text-white/80",
+            i === 0 ? "bg-white/10 text-white" : "text-white",
+          ]}
+        >
+          <span class="hidden md:inline">{item.label}</span>
+          <span class="md:hidden">
+            <Icon name={item.icon} class="w-[18px] h-[18px]" />
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</div>
+
+<script>
+  // Highlight the pill link for whichever section is on screen (home page only).
+  const links = Array.from(document.querySelectorAll("[data-nav]"));
+  const pairs = links
+    .map((l) => {
+      const h = l.getAttribute("data-hash");
+      return h ? { link: l, el: document.getElementById(h) } : null;
+    })
+    .filter((p) => p && p.el);
+
+  function setActive(id) {
+    links.forEach((l) => l.classList.toggle("bg-white/10", l.getAttribute("data-hash") === id));
+  }
+
+  if ("IntersectionObserver" in window && pairs.length) {
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((e) => {
+          if (e.isIntersecting) setActive(e.target.id);
+        });
+      },
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    pairs.forEach((p) => io.observe(p.el));
+  }
+</script>
