@@ -73,8 +73,8 @@ export const marqueeClients = [
 
 export const footprint = {
   heading: "Unveiling the Footprint",
-  left: { value: "0", label: "Views Generated" },
-  right: { value: "0+", label: "Reels Delivered" },
+  left: { value: "2.5M+", label: "Views Generated" },
+  right: { value: "70+", label: "Reels Delivered" },
   note: "and Counting",
 };
 
