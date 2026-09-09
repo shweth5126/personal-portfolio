@@ -110,6 +110,7 @@ export const allWork = {
     {
       name: "Reels & Brand",
       items: [
+        { title: "Dahi Handi", src: "/work/dahi-handi.mp4", poster: "/work/dahi-handi.jpg", orientation: "landscape" },
         { title: "Edibee - Brand Reel", src: "/work/edibee.mp4", poster: "/work/edibee.jpg", orientation: "portrait" },
         { title: "Edibee - Product Reel", src: "/work/edibee-2.mp4", poster: "/work/edibee-2.jpg", orientation: "portrait" },
         { title: "DevaRakhandar", src: "/work/deva-rakhandar.mp4", poster: "/work/deva-rakhandar.jpg", orientation: "portrait" },
